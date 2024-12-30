@@ -89,4 +89,8 @@ fun main() = runBlocking {
      */
     val customCoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    /**
+     * When executing suspendable code inside of a finally block in a try-catch, you should always use
+     * withContext(NonCancellable). It's used to clean up resources.
+     */
 }
