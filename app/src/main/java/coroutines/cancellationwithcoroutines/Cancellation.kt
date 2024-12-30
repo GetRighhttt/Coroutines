@@ -81,4 +81,12 @@ fun main() = runBlocking {
 
     println("\nEnd of main program: ${Thread.currentThread().name}")
 
+    /**
+     * Creating your own coroutine scope with SupervisorJob() ensures that when handling large transactions
+     * or large operations, if one of the coroutine fails, it won't cancel the others, or the whole scope.
+     * We typically would create an Application() class in Android, and create this there so we could
+     * have this scope live as long as the application is running.
+     */
+    val customCoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
 }
