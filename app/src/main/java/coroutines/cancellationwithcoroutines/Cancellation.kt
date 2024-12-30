@@ -8,20 +8,35 @@ import kotlinx.coroutines.*
  * Result no longer needed;
  * Taking too long to perform a tasks.
  * Etc.
+ *
+ * As soon as you begin using coroutines in your project, you must always consider cancellation because
+ * coroutine cancellation can happen at any time, and we do not have control over it.
  */
 
 fun main() = runBlocking {
 
-    println("Start of main program: ${Thread .currentThread().name}")
+    println("Start of main program: ${Thread.currentThread().name}")
 
     /**
-     * Coroutine must be cooperative to cancel.
+     * Coroutines must be cooperative to cancel.
      *
      * Cooperative?
      * Must invoke/use a suspending function that checks for cancellation - delay(), withContext(), etc.
      * in the coroutine.
      *
+     * Whenever we have blocking functions in our coroutines, we must actively check if the coroutine
+     * isActive, running, etc. in order to know when or if we should cancel it.
+     *
      * We can also use the boolean isActive flag to check if the cancellation status of the coroutine.
+     *
+     * while(isActive) continue...
+     * or more recently ensureActive(), or yield() -> ensure active isn't a suspending function whereas
+     * yield() is.
+     *
+     * yield() voluntarily lets other threads do some work.
+     *
+     * Essentially we want to ensure the coroutine is active in various points when working with
+     * multipel coroutines
      */
     val job: Job = launch {
         for (i in 0..500) {
