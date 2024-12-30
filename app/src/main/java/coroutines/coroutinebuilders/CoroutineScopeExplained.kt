@@ -10,20 +10,24 @@ import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
-/*
-When we want to use a coroutine inside a suspending function, we use CoroutineScope.
-Coroutine Scopes allow us also to cancel multiple coroutines at the same time.
-
-A CoroutineScope is just an interface that holds a reference to a CoroutineContext.
-
-A CoroutineContext is a context that holds all the meta data about the current
-coroutine.
-Data like name, job, dispatcher, etc. of that current coroutine. So when we declare a coroutine, we
-can actually pass more than just a Dispatcher to a a scope.
-
-Ex:
-withContext(Dispatchers.IO + CoroutineName("") + Job() + CoroutineExceptionHandler {_,_ -> e. printStackTrace()})
- */
+/**
+ * When we want to use a coroutine inside a suspending function, we use CoroutineScope.
+ * Coroutine Scopes allow us also to cancel multiple coroutines at the same time.
+ *
+ * A CoroutineScope is just an interface that holds a reference to a CoroutineContext.
+ *
+ * A CoroutineContext is a context that holds all the meta data about the current
+ * coroutine.
+ * Data like name, job, dispatcher, etc. of that current coroutine. So when we declare a coroutine, we
+ * can actually pass more than just a Dispatcher to a a scope.
+ *
+ * Ex:
+ * withContext(Dispatchers.IO + CoroutineName("") + Job() + CoroutineExceptionHandler {_,_ -> e. printStackTrace()})
+ *
+ *So essentially, a CoroutineScope is a wrapper for a CoroutineContext which is a wrapper for the
+ * Dispatcher, Job, Name, State, etc. of the coroutine.
+ *
+ **/
 
 fun main() {
 
