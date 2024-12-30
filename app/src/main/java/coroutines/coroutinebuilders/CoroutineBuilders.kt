@@ -3,17 +3,15 @@ package coroutines.coroutinebuilders
 import kotlinx.coroutines.*
 
 /**
- * Coroutine Builders are nothing ;more than functions that we use to create coroutines.
- * Declaring a Coroutine which operates IN a background thread...
- *
- * launch, async, and runblocking are coroutine builders that essentially just create coroutines.
+ * Coroutine Builders are nothing more than functions that we use to create coroutines.
+ * launch, async, and runBlocking are coroutine builders that essentially just create coroutines.
  *
  * launch and async both run concurrently, however async returns a result.
  *
- * runblocking is the only Coroutine builder that cannot be used in Structured Concurrency. It must be used as
+ * runBlocking is the only Coroutine builder that cannot be used in Structured Concurrency. It must be used as
  * a root or parent scope.
  *
- * Jobs are essentially the results of running an asynchronous task.
+ * Jobs are the results of running an asynchronous task.
  * "A cancellable thing with a lifecycle that culminates its completion".
  * Kind of like a disposable, and it represents an actual coroutine.
  * Job can be used to execute a number of methods built in to the coroutines api including canceling coroutines.
@@ -41,7 +39,8 @@ fun main() = runBlocking { // creates a blocking coroutine that executes in main
      * The return type is of a generic type, so we can pass whatever we want into it.
      *
      * Async function is usually used when we want to return some data. It is pretty much the same as launch
-     * except it returns a Deferred<T> object of generic type.
+     * except it returns a Deferred<T> object of generic type. Async {} is usually used when we
+     * want to launch multiple coroutines in parallel, and Await() the result to perform another operation.
      *
      * We will launch this on the default dispatcher.
      */
