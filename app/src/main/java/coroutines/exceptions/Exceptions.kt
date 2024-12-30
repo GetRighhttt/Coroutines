@@ -1,10 +1,12 @@
 package coroutines.exceptions
 
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.yield
 
 /**
@@ -80,7 +82,20 @@ fun main() {
 
         /**
          * SupervisorJob will ensure all jobs will not cancel is one coroutine fails.
+         * Very useful when creating your own CoroutineScopes.
+         *
+         * coroutineScope -> This function is designed for parallel decomposition of
+         * work. When any child coroutine in this scope fails, this scope fails and all the rest of
+         * the children are cancelled (for a different behavior see supervisorScope).
+         *
+         * supervisorScope -> Creates a CoroutineScope with SupervisorJob and calls the specified
+         * suspend block with this scope. The provided scope inherits its coroutineContext from the
+         * outer scope, but overrides context's Job with SupervisorJob. Unlike coroutineScope,
+         * a failure of a child does not cause this scope to fail and does not affect its other
+         * children, so a custom policy for handling failures of its children can be implemented.
          */
+        coroutineScope {}
+        supervisorScope {}
     }
 }
 
