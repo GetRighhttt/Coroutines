@@ -63,7 +63,8 @@ fun main() { // executes in main thread
      * GlobalScope launches for the whole application lifetime.
      * Lifecycle launches and dies when the activity dies. (Activity/Fragment)
      * ViewModel launches and dies when the view-model is no longer needed.(ViewModels)
-     * Coroutine wraps the given context. Allows you to create your own scope.
+     * Coroutine wraps the given context. Allows you to create your own scope. Really an interface
+     * to hold CoroutineContext and just make it more readable.
      *
      * In Android, we have launch, launchWhenStarted, launchWhenResumed, etc. and these allow us to further manage
      * our jobs.
@@ -84,8 +85,8 @@ fun main() { // executes in main thread
 
         /**
          * Coroutines have their own context that can be inherited from parent coroutine.
-         *
-         * Context have two objects, a job, and a dispatcher.
+         * Coroutines have the ability to switch contexts at any time and that is used with
+         * "withContext()".
          *
          * When we run a coroutine using Global Scope, it launches on a DefaultDispatcher, which is a thread pool for
          * short-lived coroutines.
@@ -93,10 +94,19 @@ fun main() { // executes in main thread
          * async or launch.
          * Dispatchers that define the thread of the coroutine.
          *
-         * Main = main thread. Usually for UI related tasks.
+         * Main = main thread. Usually for UI related tasks and schedules tasks for after pending tasks; so it doesn't
+         * do anything immediately.
+         *
+         * Main.immediate = main thread that sends tasks immediately. When switching from main to main.immediate
+         * the immediate thread takes precedence over the current tasks.
+         *
          * IO = input/output. Usually long-running tasks.
-         * Default = default. Used by all standard coroutine builders.
-         * Unconfined = not confined to any thread.
+         *
+         * Default = default. Used primarily for CPU heavy related tasks and is the default thread.
+         *
+         * Unconfined = not confined to any thread. Will enter on the thread the coroutine is
+         * currently on. Will also leave execution when thread is switched. The official Kotlin
+         * docs do not advise using unconfined...
          */
         withContext(Dispatchers.IO) {
             println("Starting Coroutine thread: ${Thread.currentThread().name}")
