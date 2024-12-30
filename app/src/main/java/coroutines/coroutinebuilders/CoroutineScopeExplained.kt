@@ -36,4 +36,6 @@ fun main() {
     /*
     CoroutineScope(coroutineContext=[CoroutineName(first_coroutine), JobImpl{Active}@17ed40e0, Dispatchers.Main[missing, cause=java.lang.RuntimeException: Stub!]])
      */
+
+    // we can pass multiple contexts to one scope if we need to
 }
