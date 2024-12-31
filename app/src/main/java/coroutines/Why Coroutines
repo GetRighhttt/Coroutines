@@ -1,6 +1,6 @@
 Why Coroutines?
 
-Coroutines are one of the best ways to achieve asynchronous programming with minimal code and advancedkotlin code quality.
+Coroutines are one of the best ways to achieve asynchronous programming with minimal code and advanced kotlin code quality.
 In Android, the main UI thread is responsible for updating the screen at a rate of 60 times per second.
 So, because of this, we want to do all heavy operations on another thread, preferably a background thread. This
 is the concept of asynchronous programming, or programming tasks in parallel.
@@ -11,9 +11,12 @@ and the current tasks will not be interrupted. When thinking of asynchronous pro
 programming, think of "blocking architecture"; one task must be complete in order for another to finish.
 Coroutines helps us achieve this and alleviate the pain of boilerplate code in the process.
 
-A coroutine is essentially a lightweight thread that exists ON a background thread. This means that a coroutine is not
-an actual background thread in itself. One Coroutine represents a job that it is doing,
-and that job can consists of various tasks.
+A coroutine is an instance of suspendable code that exists ON a background thread. This means that a
+coroutine is not an actual background thread in itself. One Coroutine represents a JOB that it is doing,
+and that job can consists of various tasks. A JOB is considered a cancelable thing of an asynchronous
+operation with a lifecycle. It's literally just the result of a coroutine that can be canceled and has
+a lifecycle attached to it that we can use to get information about said coroutine like if it's active,
+running, or complete (lifecycle).
 
 With those tasks, you can "suspend" functions or methods to handle the tasks, which essentially suspends one task
 to allow for another to complete while its doing its work. They are so lightweight that you can run thousands

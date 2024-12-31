@@ -8,4 +8,7 @@ Then, when you would come back to the game, you resume from the position where y
 In normal threads, this is not possible, because Threads usually can only be blocked, not paused or stopped in the
 middle. When a coroutine is suspended, it does not consume any resources, prioritizing the application's resources.
 A coroutine in theory can even resume on a different thread when suspended which is another powerful key feature
-and concept of Kotlin coroutines.
+and concept of Kotlin coroutines. When a coroutine is suspended, typically the reason/result/response
+is still working in the background, but the coroutine ON the thread itself is paused which then
+allows for other coroutines to continue. And when those coroutines are suspended, the previous coroutine's
+response should be back, thus returning that continuation object, and continuing work.
