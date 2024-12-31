@@ -86,7 +86,9 @@ fun main() { // executes in main thread
         /**
          * Coroutines have their own context that can be inherited from parent coroutine.
          * Coroutines have the ability to switch contexts at any time and that is used with
-         * "withContext()".
+         * "withContext()", however withContext does not return a job. It's return type is T.
+         * withContext should only be used when switching context of a current coroutine. It does not
+         * return a result.
          *
          * When we run a coroutine using Global Scope, it launches on a DefaultDispatcher, which is a thread pool for
          * short-lived coroutines.
@@ -118,7 +120,7 @@ fun main() { // executes in main thread
     }
 
     /**
-     * Runblocking creates a coroutine thread that blocks the current main thread and allows the
+     * runBlocking creates a coroutine thread that blocks the current main thread and allows the
      * coroutine to finish, but this is not a good approach.
      */
     runBlocking {
