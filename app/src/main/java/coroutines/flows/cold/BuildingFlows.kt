@@ -1,6 +1,6 @@
 @file:Suppress("KotlinConstantConditions")
 
-package coroutines.flows
+package coroutines.flows.cold
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.*
  * Flow Builder is the most popular and most used way. When working with Android, we won't usually
  * have to create our own flows, but this is good to understand flows better.
  */
-
 
 /**
  * Flow builder takes a suspend function as a function parameter which allows us to call suspend functions in it.

@@ -1,0 +1,19 @@
+What are Cold and Hot Flows?
+
+Cold Flow:
+- Emits values only when a collector is attached.
+- Each collector receives the entire stream of values from the beginning.
+- Considered the default behavior for most data streams.
+- Considered "lazy" as cold flows are only active when collected or published.
+- Regular flows are typically the use of cold flows.
+
+Hot Flow:
+- Emits values even if no collector is listening.
+- New collectors receive data from the point they start listening, not from the beginning.
+- Useful for scenarios where multiple components need to be updated with the latest data
+simultaneously.
+- It remains in memory as long as the flow is collected or while any other references to it exist
+from a garbage collection root.
+- StateFlow, SharedFlow, Streams are all hot flows that are normally used when receiving values
+in android data collection from apis.
+
