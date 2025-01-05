@@ -4,6 +4,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.lang.RuntimeException
 
+
+/**
+ * @author Stefan Bayne
+ */
+
 /**
  * Flows are streams of data that can be computed asynchronously.
  * "A cold, asynchronous stream and is an implementation of the Observable design pattern."

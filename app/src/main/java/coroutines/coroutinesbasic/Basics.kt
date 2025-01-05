@@ -3,6 +3,10 @@ package coroutines.coroutinesbasic
 import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 
+
+/**
+ * @author Stefan Bayne
+ */
 /**
  * Coroutines allow us to run thousands of long operations on the background thread.
  *
