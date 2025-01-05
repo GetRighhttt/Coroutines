@@ -10,6 +10,10 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.yield
 
 /**
+ * @author Stefan Bayne
+ */
+
+/**
  * How do Coroutines handle exceptions? What happens when they fail?
  *
  * Exceptions bubble up to parent scope, and if not handled there, the app will crash.

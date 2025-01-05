@@ -6,6 +6,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
+ * @author Stefan Bayne
+ */
+
+/**
  * Here we aim to demonstrate how suspension works with Kotlin coroutines.
  *
  * Usually in Development with Coroutines, we suspend methods when we are making some sort of network call, or

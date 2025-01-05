@@ -3,49 +3,45 @@ package coroutines.cancellationwithcoroutines
 import kotlinx.coroutines.*
 
 /**
- * Why cancel a coroutine?
- *
- * Result no longer needed;
- * Taking too long to perform a tasks.
- * Etc.
- *
- * As soon as you begin using coroutines in your project, you must always consider cancellation because
- * coroutine cancellation can happen at any time, and we do not have control over it.
+ * @author Stefan Bayne
  */
 
+/**
+ * * Why cancel a coroutine?
+ *  *
+ *  * Result no longer needed;
+ *  * Taking too long to perform a tasks.
+ *  * Etc.
+ *  *
+ *  * As soon as you begin using coroutines in your project, you must always consider cancellation because
+ *  * coroutine cancellation can happen at any time, and we do not have control over it.
+ */
 fun main() = runBlocking {
 
     println("Start of main program: ${Thread.currentThread().name}")
 
     /**
-     * Coroutines must be cooperative to cancel.
+     * Coroutines typically must be cooperative to cancel when not using the cancel() method on a
+     * coroutine.
      *
      * Cooperative?
-     * Must invoke/use a suspending function that checks for cancellation - delay(), withContext(), etc.
-     * in the coroutine.
+     * Must invoke/use a suspending function that checks for cancellation - delay(), withContext(),
+     * yield, etc. in the coroutine.
      *
      * Whenever we have blocking functions in our coroutines, we must actively check if the coroutine
      * isActive, running, etc. in order to know when or if we should cancel it.
      *
      * We can also use the boolean isActive flag to check if the cancellation status of the coroutine.
      *
-     * while(isActive) continue...
-     * or more recently ensureActive(), or yield() -> ensure active isn't a suspending function whereas
-     * yield() is.
+     * while(isActive) continue...or yield(), etc.
      *
-     * yield() voluntarily lets other threads do some work.
-     *
-     * Essentially we want to ensure the coroutine is active in various points when working with
-     * multipel coroutines
+     * isActive: This property on CoroutineScope or Job indicates whether the coroutine is active.
+     * ensureActive(): This function throws a CancellationException if the coroutine is cancelled.
+     * yield(): This function checks for cancellation and suspends the coroutine if it's cancelled.
      */
     val job: Job = launch {
         for (i in 0..500) {
             print(" $i ")
-            /*
-            Yields the current thread or thread pool of the current coroutine dispatcher so other coroutines
-            can run.
-            Usually ends up speeding functionality.
-             */
             yield()
         }
     }

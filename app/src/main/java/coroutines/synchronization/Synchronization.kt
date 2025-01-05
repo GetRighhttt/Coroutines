@@ -9,6 +9,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+
+/**
+ * @author Stefan Bayne
+ */
+
 /**
  * Synchronization - coordinating how shared resources are controlled when executing multiple
  * threads or processes.
