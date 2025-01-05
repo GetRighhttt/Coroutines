@@ -1,4 +1,5 @@
-Callback flows are flows that allow for callbacks for objects.
+Callback flows are flows that allow for callbacks to/from objects and are cold. Regular flows that
+have the context of callback methods.
 
 "Creates an instance of a cold Flow with elements that are sent to a SendChannel provided to the
 builder's block of code via ProducerScope. It allows elements to be produced by code that is running
@@ -7,9 +8,9 @@ in a different context or concurrently."
 "The resulting flow is cold, which means that block is called every time a terminal operator is
 applied to the resulting flow."
 
-Example using Location Class from @philipplackner.
+Example using Location Class
 
-`import android.Manifest
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
