@@ -7,14 +7,36 @@ import kotlinx.coroutines.*
  */
 
 /**
- * * Why cancel a coroutine?
- *  *
+ * Why cancel a coroutine?
+ *
  *  * Result no longer needed;
- *  * Taking too long to perform a tasks.
- *  * Etc.
- *  *
+ *  * Taking too long to perform a tasks. Etc.
+ *
  *  * As soon as you begin using coroutines in your project, you must always consider cancellation because
  *  * coroutine cancellation can happen at any time, and we do not have control over it.
+ *
+ *  How does coroutine cancellation work?
+ *
+ *  Coroutines have certain check points where they check to see if the coroutine is cancelled or
+ *  not, and must be checked with a coroutineContext method(ensureActive(), isActive(), etc.).
+ *
+ *  All of the suspend functions in coroutines are cancellable. They check for cancellation of coroutine,
+ *  and throw CancellationException if it is cancelled. So yield(), delay(), coroutine support in
+ *  ROOM, Retrofit, Ktor, etc. all check for cancellation. However, if a created coroutine is working in a
+ *  computation and there isn't a check for cancellation, then cancellation cannot happen. This same
+ *  problem occurs when catching a CancellationException and not rethrowing it.
+ *
+ *  Example of delay method checking for cancellation:
+ *
+ *  public suspend fun delay(timeMillis: Long) {
+ *     if (timeMillis <= 0) return // don't delay
+ *     return suspendCancellableCoroutine sc@ { cont: CancellableContinuation<Unit> ->
+ *         // if timeMillis == Long.MAX_VALUE then just wait forever like awaitCancellation, don't schedule.
+ *         if (timeMillis < Long.MAX_VALUE) {
+ *             cont.context.delay.scheduleResumeAfterDelay(timeMillis, cont)
+ *         }
+ *     }
+ * }
  */
 fun main() = runBlocking {
 
@@ -28,8 +50,8 @@ fun main() = runBlocking {
      * Must invoke/use a suspending function that checks for cancellation - delay(), withContext(),
      * yield, etc. in the coroutine.
      *
-     * Whenever we have blocking functions in our coroutines, we must actively check if the coroutine
-     * isActive, running, etc. in order to know when or if we should cancel it.
+     * In between blocking calls in our coroutines, we must have a check for cancellation; i.e if
+     * isActive, ensureActive(), running, etc. in order to know when or if we should cancel it.
      *
      * We can also use the boolean isActive flag to check if the cancellation status of the coroutine.
      *

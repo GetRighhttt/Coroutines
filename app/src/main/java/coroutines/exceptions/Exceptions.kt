@@ -85,7 +85,7 @@ fun main() {
         }
 
         /**
-         * SupervisorJob will ensure all jobs will not cancel is one coroutine fails.
+         * SupervisorJob will ensure all jobs will not cancel if one coroutine fails.
          * Very useful when creating your own CoroutineScopes.
          *
          * coroutineScope -> This function is designed for parallel decomposition of
