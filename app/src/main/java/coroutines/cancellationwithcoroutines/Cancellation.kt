@@ -124,20 +124,24 @@ fun main() = runBlocking {
      */
     println("About to cancel coroutine...")
     val newJob = launch {
+
         val firstJob = launch {
             delay(200L)
             println("First child: I'm sleeping .. Second One canceled.")
         }
-//        firstJob.cancelAndJoin()
-        val secondJob = launch {
+        firstJob.cancelAndJoin() // cancels the first job but not the whole coroutine
+        println("First child: I've finished")
+         val secondJob = launch {
             delay(200L)
             println("Second child: I'm sleeping .. First One canceled.")
         }
-        secondJob.cancelAndJoin()
+        secondJob.cancelAndJoin() // cancels the second job but not the whole coroutine
+
         delay(1000L)
         println("Second child: I've finished")
     }
-    newJob.join()
+    println("Cancelled job...")
+    newJob.cancelAndJoin() // cancels the entire coroutine
 
     println("\nEnd of main program: ${Thread.currentThread().name}")
 }
