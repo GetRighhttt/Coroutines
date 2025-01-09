@@ -4,11 +4,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 /**
  * @author Stefan Bayne
@@ -22,16 +21,28 @@ import kotlin.coroutines.Continuation
 fun main() {
 
     // code to be called when resuming a suspension
-    fun showSuspension() = GlobalScope.launch {
-        val newContinuation = Continuation<Int>(Dispatchers.Default) { continuation ->
+    fun showContinuation() = GlobalScope.launch {
+        Continuation<Int>(Dispatchers.Default) { continuation ->
             println("Inside a continuation right now... ${continuation.isSuccess}")
-        }
-        println(newContinuation.context.isActive)
+        }.resume(1)
     }
     runBlocking {
-        delay(2000L)
-        println(showSuspension())
+        launch {
+            println("starting coroutine...")
+            println("continuing")
+            showContinuation()
+        }
+        delay(1000L)
+        showContinuation()
         println("I am resuming now...")
         delay(1000)
     }
+
+    /**
+     * starting coroutine...
+     * continuing
+     * Inside a continuation right now... true
+     * I am resuming now...
+     * Inside a continuation right now... true
+     */
 }
