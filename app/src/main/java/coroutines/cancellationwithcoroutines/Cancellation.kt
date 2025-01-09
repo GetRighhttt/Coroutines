@@ -94,6 +94,7 @@ fun main() = runBlocking {
             println("Exception caught safely.")
         } finally {
             withContext(NonCancellable) {
+                println()
                 println("job: I'm running finally")
                 delay(1000L)
                 println("job: And I've just delayed for 1 sec because I'm non-cancellable")
@@ -122,22 +123,21 @@ fun main() = runBlocking {
      *  * If we also cancel a coroutine scope, the same occurs; all of the children will be canceled.
      */
     println("About to cancel coroutine...")
-
-    customCoroutineScope.launch {
-        val newJob = launch {
-            val firstJob = launch {
-                delay(500L)
-                println("First child: I'm sleeping .. ")
-            }
-            val secondJob = launch {
-                delay(200L)
-                println("First child: I'm sleeping ..")
-            }
+    val newJob = launch {
+        val firstJob = launch {
             delay(200L)
-            println("First Job cancelled...")
-            println("Second child: I've finished")
+            println("First child: I'm sleeping .. Second One canceled.")
         }
+//        firstJob.cancelAndJoin()
+        val secondJob = launch {
+            delay(200L)
+            println("Second child: I'm sleeping .. First One canceled.")
+        }
+        secondJob.cancelAndJoin()
+        delay(1000L)
+        println("Second child: I've finished")
     }
+    newJob.join()
 
     println("\nEnd of main program: ${Thread.currentThread().name}")
 }
