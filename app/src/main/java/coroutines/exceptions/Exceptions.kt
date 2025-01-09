@@ -31,36 +31,12 @@ fun main() {
             try {
                 throw Exception("Here is the exception")
             } catch (e: Exception) {
-                coroutineContext.ensureActive()
+                ensureActive()
                 e.printStackTrace()
             }
             delay(2000)
-            println("Coroutine finished") // will still get printed
+            println("Coroutine finished with regular exception catching") // will still get printed
         }
-
-
-        /**
-         * java.lang.Exception: Here is the exception
-         * 	at coroutines.exceptions.ExceptionsKt$main$1$1.invokeSuspend(Exceptions.kt:21)
-         * 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
-         * 	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:234)
-         * 	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:166)
-         * 	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:397)
-         * 	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl(CancellableContinuationImpl.kt:431)
-         * 	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$default(CancellableContinuationImpl.kt:420)
-         * 	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:518)
-         * 	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:500)
-         * 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:284)
-         * 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
-         * 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
-         * 	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
-         * 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
-         * 	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
-         * 	at coroutines.exceptions.ExceptionsKt.main(Exceptions.kt:17)
-         * 	at coroutines.exceptions.ExceptionsKt.main(Exceptions.kt)
-         *
-         * Coroutine finished
-         */
 
         /**
          * We can also use handlers to handle exceptions.
@@ -77,11 +53,11 @@ fun main() {
             try {
                 throw Exception("Here is the exception")
             } catch (e: Exception) {
-                coroutineContext.ensureActive()
+                ensureActive()
                 e.printStackTrace()
             }
             delay(2000)
-            println("Coroutine finished") // will still get printed
+            println("Coroutine finished using exception handler") // will still get printed
         }
 
         /**
