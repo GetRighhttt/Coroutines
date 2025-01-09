@@ -1,5 +1,6 @@
 package coroutines.cancellationwithcoroutines
 
+import android.provider.Settings.Global
 import kotlinx.coroutines.*
 
 /**
@@ -27,17 +28,19 @@ import kotlinx.coroutines.*
  *  problem occurs when catching a CancellationException and not rethrowing it.
  *
  *  Example of delay method checking for cancellation:
- *
- *  public suspend fun delay(timeMillis: Long) {
- *     if (timeMillis <= 0) return // don't delay
- *     return suspendCancellableCoroutine sc@ { cont: CancellableContinuation<Unit> ->
- *         // if timeMillis == Long.MAX_VALUE then just wait forever like awaitCancellation, don't schedule.
- *         if (timeMillis < Long.MAX_VALUE) {
- *             cont.context.delay.scheduleResumeAfterDelay(timeMillis, cont)
- *         }
- *     }
- * }
  */
+
+//    public suspend fun delay1(timeMillis: Long) {
+//        if (timeMillis <= 0) return // don't delay
+//        return suspendCancellableCoroutine sc@{ cont: CancellableContinuation<Unit> ->
+//            // if timeMillis == Long.MAX_VALUE then just wait forever like awaitCancellation, don't schedule.
+//            if (timeMillis < Long.MAX_VALUE) {
+//                cont.context.delay.scheduleResumeAfterDelay(timeMillis, cont)
+//            }
+//        }
+//    }
+
+@OptIn(DelicateCoroutinesApi::class)
 fun main() = runBlocking {
 
     println("Start of main program: ${Thread.currentThread().name}")
@@ -68,10 +71,15 @@ fun main() = runBlocking {
         }
     }
 
-    delay(7)
+    delay(2)
     job.cancelAndJoin() // cancels the coroutine.
 
     print("\n")
+
+    /**
+     * When executing suspendable code inside of a finally block in a try-catch, you should always use
+     * withContext(NonCancellable). It's used to clean up resources.
+     */
 
     val job2: Job = launch(Dispatchers.Default) {
         // try catch block for cancellation exception handling with coroutines.
@@ -97,18 +105,39 @@ fun main() = runBlocking {
     job2.cancel("My own crash message.")
     job2.join()
 
-    println("\nEnd of main program: ${Thread.currentThread().name}")
-
     /**
      * Creating your own coroutine scope with SupervisorJob() ensures that when handling large transactions
      * or large operations, if one of the coroutine fails, it won't cancel the others, or the whole scope.
      * We typically would create an Application() class in Android, and create this there so we could
      * have this scope live as long as the application is running.
      */
-    val customCoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    val customCoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     /**
-     * When executing suspendable code inside of a finally block in a try-catch, you should always use
-     * withContext(NonCancellable). It's used to clean up resources.
+     * Internal workings of Coroutines:
+     *
+     * * If a job is cancelled, all of it's children are then cancelled which is the idea behind
+     * * implementing structured concurrency.
+     *
+     *  * If we also cancel a coroutine scope, the same occurs; all of the children will be canceled.
      */
+    println("About to cancel coroutine...")
+
+    customCoroutineScope.launch {
+        val newJob = launch {
+            val firstJob = launch {
+                delay(500L)
+                println("First child: I'm sleeping .. ")
+            }
+            val secondJob = launch {
+                delay(200L)
+                println("First child: I'm sleeping ..")
+            }
+            delay(200L)
+            println("First Job cancelled...")
+            println("Second child: I've finished")
+        }
+    }
+
+    println("\nEnd of main program: ${Thread.currentThread().name}")
 }
