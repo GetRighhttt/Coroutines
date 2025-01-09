@@ -100,6 +100,35 @@ fun main() {
          */
         coroutineScope {}
         supervisorScope {}
+
+        /**
+         *
+         * In the end:
+         * * Exceptions propagate from child to parent. Suspending functions (including coroutine
+         * scope functions) throw exceptions, and asynchronous coroutine builders propagate
+         * exceptions to their parents via the scope.
+         *
+         * * To stop exception propagation, you can catch exceptions from suspending functions before
+         * they reach coroutine builders, or catch exceptions from scope functions.
+         *
+         * * SupervisorJob is a special kind of job that ignores all exceptions in its children.
+         * It is used to prevent exceptions from canceling all the children of a scope.
+         *
+         * * SupervisorJob should not be used as a builder argument as it does not change the fact
+         * that the parent uses a regular Job.
+         *
+         * * supervisorScope is a coroutine scope function that uses a SupervisorJob instead of a
+         * regular Job. It ignores exceptions from its children.
+         *
+         * * withContext(SupervisorJob()) is not a good replacement for supervisorScope because
+         * SupervisorJob is not inherited, and withContext always uses a regular Job.
+         *
+         * * When calling await on Deferred, it should return the value if the coroutine finished
+         * successfully, or it should throw an exception if the coroutine ended with an exception.
+         *
+         * * CoroutineExceptionHandler is a context that can be used to define default behavior for
+         * all exceptions in a coroutine.
+         */
     }
 }
 

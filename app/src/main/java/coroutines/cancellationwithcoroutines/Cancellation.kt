@@ -92,7 +92,7 @@ fun main() = runBlocking {
             }
         } catch (e: CancellationException) {
             println("Exception caught safely.")
-        } finally {
+        } finally { // finally blocks still get called when coroutines are cancelled
             withContext(NonCancellable) {
                 println()
                 println("job: I'm running finally")
@@ -144,4 +144,10 @@ fun main() = runBlocking {
     newJob.cancelAndJoin() // cancels the entire coroutine since its the parent job
 
     println("\nEnd of main program: ${Thread.currentThread().name}")
+
+    /**
+     * Coroutines do not immediately complete when working with CancellationException. Coroutines
+     * underneath the hood might have some additional cleanup work to do, therefore allowing for the
+     * coroutine to enter the "Cancellation State" and not immediately cancel.
+     */
 }
