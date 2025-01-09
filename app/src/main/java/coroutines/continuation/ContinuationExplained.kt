@@ -13,10 +13,6 @@ import kotlin.coroutines.resume
  * @author Stefan Bayne
  */
 
-/**
- *
- */
-
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
 
@@ -29,20 +25,25 @@ fun main() {
     runBlocking {
         launch {
             println("starting coroutine...")
-            println("continuing")
+            println("delaying...")
+            delay(1000)
             showContinuation()
         }
-        delay(1000L)
-        showContinuation()
-        println("I am resuming now...")
-        delay(1000)
+        launch {
+            delay(2000L)
+            println("new coroutine")
+            println("delaying...")
+            delay(1000)
+            showContinuation()
+        }
     }
 
     /**
      * starting coroutine...
-     * continuing
+     * delaying...
      * Inside a continuation right now... true
-     * I am resuming now...
+     * new coroutine
+     * delaying...
      * Inside a continuation right now... true
      */
 }
