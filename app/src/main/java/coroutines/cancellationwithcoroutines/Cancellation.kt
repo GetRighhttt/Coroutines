@@ -123,7 +123,7 @@ fun main() = runBlocking {
      *  * If we also cancel a coroutine scope, the same occurs; all of the children will be canceled.
      */
     println("About to cancel coroutine...")
-    val newJob = launch {
+    val newJob = customCoroutineScope.launch {
 
         val firstJob = launch {
             delay(200L)
@@ -141,7 +141,7 @@ fun main() = runBlocking {
         println("Second child: I've finished")
     }
     println("Cancelled job...")
-    newJob.cancelAndJoin() // cancels the entire coroutine
+    newJob.cancelAndJoin() // cancels the entire coroutine since its the parent job
 
     println("\nEnd of main program: ${Thread.currentThread().name}")
 }
