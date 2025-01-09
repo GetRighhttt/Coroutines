@@ -7,7 +7,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.yield
 
 /**
  * @author Stefan Bayne
