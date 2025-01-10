@@ -1,5 +1,6 @@
 Callback flows are flows that allow for callbacks to/from objects and are cold. Regular flows that
-have the context of callback methods.
+have the context of callback methods. CallbackFlows allows you to convert callback-based APIs into
+Flows.
 
 "Creates an instance of a cold Flow with elements that are sent to a SendChannel provided to the
 builder's block of code via ProducerScope. It allows elements to be produced by code that is running
