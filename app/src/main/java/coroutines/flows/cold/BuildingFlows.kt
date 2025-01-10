@@ -11,8 +11,12 @@ import kotlinx.coroutines.runBlocking
  */
 
 /**
- * Flow builder takes a suspend function as a function parameter which allows us to call suspend functions in it.
+ * Flow builder takes a suspend function as a function parameter which allows us to call suspend
+ * functions in it.
+ *
+ * public fun <T> flow (@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<T>
  */
+
 fun makeFlow(): Flow<Int> = flow {
     repeat(10) {
         delay(400)
@@ -26,8 +30,8 @@ fun makeFlow(): Flow<Int> = flow {
     } // 0 6 12 18 24
 
 /**
- * Let's now create list we can use to demonstrate passing in a stream or list of data,
- * and returning that data in a flow.
+ * Let's now create lists we can use to demonstrate passing in a stream or list of data, and
+ * returning that data in a flow.
  */
 fun fetchUserMessages(): List<String> {
     return listOf("Here we are!", "It's time to party!", "Don't wait up!", "It's going down today!")
@@ -37,13 +41,16 @@ fun fetchUserNumbers(): MutableList<String> {
     return mutableListOf("1234", "5678")
 }
 
-// we can also perform operations on flows as we demonstrate below
+/**
+ * Now we are going to use the lists created above, and demonstrate how we can use intermediary or
+ * optional methods on flows as they are being constructed to manipulate streams of data.
+ */
 fun buildFlow(): Flow<String> = flow {
     var count = 5
     while (count != 0) {
         val userMessages: List<String> = fetchUserMessages()
         delay(500)
-        emit(userMessages.joinToString(" "))
+        emit(userMessages.joinToString(" ").lowercase())
         count--
     }
 }
