@@ -2,7 +2,17 @@ package coroutines.flows.cold
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 
 
@@ -97,7 +107,7 @@ fun main() {
                 .filter { it >= 30 }
 
         }
-        tempList.asFlow().collect { println(it) } // 30, 40
+        tempList.asFlow().onEach { println(it) }.collect() // 30, 40
 
         // we can also convert functions to flows
         val newFunction = suspend {
@@ -105,7 +115,37 @@ fun main() {
             "x"
         }
         newFunction.asFlow()
-            .collect { println(it) } // waits a sec, then prints x
+            .catch { a ->
+               emit(a.message ?: "Exception thrown...")
+            }
+            .combine(tempList.asFlow()) { number, list ->
+                "$number to $list"
+            }
+            .onEach { println(it) } // waits a sec, then prints x
+            .collect()
     }
 
+    /**
+     * 0
+     * 6
+     * 12
+     * 18
+     * 24
+     * here we are! it's time to party! don't wait up! it's going down today!
+     * here we are! it's time to party! don't wait up! it's going down today!
+     * here we are! it's time to party! don't wait up! it's going down today!
+     * here we are! it's time to party! don't wait up! it's going down today!
+     * here we are! it's time to party! don't wait up! it's going down today!
+     * 50
+     * 52
+     * 32
+     * 54
+     * 56
+     * 2
+     * 4
+     * 6
+     * 8
+     * [30, 40]
+     * x to [30, 40]
+     */
 }
