@@ -23,8 +23,8 @@ fun main() {
 
     runBlocking {
         /**
-         * First we are going to go over some Flow operators that focus on combining emissions together:
-         * combine, zip, merge.
+         * First we are going to go over some intermediate Flow operators that focus on combining
+         * emissions together: combine and zip.
          *
          * combine() - forms pairs from elements. When using combine, every new elements replaces its'
          * predecessor. Combine also will emit until both flows are closed. Combine is mostly used
