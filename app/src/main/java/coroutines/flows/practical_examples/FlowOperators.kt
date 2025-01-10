@@ -1,4 +1,4 @@
-package coroutines.practical_examples
+package coroutines.flows.practical_examples
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
