@@ -43,7 +43,7 @@ fun fetchUserNumbers(): MutableList<String> {
 
 /**
  * Now we are going to use the lists created above, and demonstrate how we can use intermediary or
- * optional methods on flows as they are being constructed to manipulate streams of data.
+ * optional methods on those lists as they are being emitted to manipulate streams of data.
  */
 fun buildFlow(): Flow<String> = flow {
     var count = 5
