@@ -15,5 +15,5 @@ Flow Processing - the flow of how operators work together when chained. Certain 
 upstream however most are considered downstream operators.
 
 Here is a link that list most of all the operators used:
-[Flow_Operators](https://medium.com/@arshamjafari85/mastering-flow-operators-in-kotlin-a-comprehensive-guide-192ac58e7104)
-[Additional_Operators](https://medium.com/@engineermuse/mastering-your-flow-a-guide-to-kotlin-flow-terminal-operators-01535cfb0f85)
+https://medium.com/@arshamjafari85/mastering-flow-operators-in-kotlin-a-comprehensive-guide-192ac58e7104
+https://medium.com/@engineermuse/mastering-your-flow-a-guide-to-kotlin-flow-terminal-operators-01535cfb0f85
