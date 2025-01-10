@@ -16,16 +16,10 @@ import kotlinx.coroutines.runBlocking
  * @author Stefan Bayne
  */
 
-/**
- * Here we are going to go over Flow operators which is a key benefit to using Flows.
- */
 fun main() {
 
     runBlocking {
         /**
-         * First we are going to go over some intermediate Flow operators that focus on combining
-         * emissions together: combine and zip.
-         *
          * combine() - forms pairs from elements. When using combine, every new elements replaces its'
          * predecessor. Combine also will emit until both flows are closed. Combine is mostly used
          * when needing to actively observe two sources of changes. Good for when we need to have
