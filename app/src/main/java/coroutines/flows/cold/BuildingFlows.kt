@@ -1,10 +1,9 @@
-@file:Suppress("KotlinConstantConditions")
-
 package coroutines.flows.cold
 
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -12,10 +11,9 @@ import kotlinx.coroutines.flow.*
  */
 
 /**
- * There are a lot of ways to create flows.
- * Here we will show the majority of those examples.
- * Flow Builder is the most popular and most used way. When working with Android, we won't usually
- * have to create our own flows, but this is good to understand flows better.
+ *  There are a lot of ways to create flows. Here we will show the majority of those examples.
+ *  Flow Builder is the most popular and most used way. When working with Android, we won't usually
+ *  have to create our own flows, but this is good to understand flows better.
  */
 
 /**
@@ -33,6 +31,10 @@ fun makeFlow(): Flow<Int> = flow {
         it.printStackTrace()
     } // 0 6 12 18 24
 
+/**
+ * Let's now create list we can use to demonstrate passing in a stream or list of data,
+ * and returning that data in a flow.
+ */
 fun fetchUserMessages(): List<String> {
     return listOf("Here we are!", "It's time to party!", "Don't wait up!", "It's going down today!")
 }
@@ -54,65 +56,55 @@ fun buildFlow(): Flow<String> = flow {
 
 fun buildNumberFlow(): Flow<String> = flow {
     var count = 1
-    while (count != 5) {
+    while (count != 2) {
         val userNumbers: List<String> = fetchUserNumbers()
         delay(400)
         emit(userNumbers
-            .joinToString(" ") // back to string
-            .toList() // converts chars to numbers
-            .map { it.code } // converts char to Number
-            .filter { it % 2 == 0 } // filters the number by a condition
+            .joinToString(" ")
+            .toList()
+            .map { it.code } // converts char to Number UTF-16
+            .filter { it % 2 == 0 }
             .forEach {
                 println(it)
             }
-            .toString() // sets it back to string
+            .toString()
         )
         count++
     }
 }
 
 @OptIn(FlowPreview::class)
-suspend fun main() {
+fun main() {
 
-    /*
-    FLOW BUILDER
-     */
-    makeFlow()
-        .collect { println(it) }
+    runBlocking {
+        // display flow data from lists we created
+        makeFlow().collect { println(it) }
+        buildFlow().collect { println(it) }
+        buildNumberFlow().collect()
 
-    buildFlow()
-        .collect { println(it) }
+        // flowOf() - simple and we just define the values.
+        flowOf(2, 4, 6, 8)
+            .collect { println(it) } // 2468
 
-    buildNumberFlow()
-        .collect {
-            println(it)
+        // emptyFlow() - flow with no values.
+        emptyFlow<Int>().collect { println(it) } // nothing returned
+
+        // asFlow() converts every iterable, iterators, or collections into flows
+        val tempList = suspend {
+            listOf(1, 2, 3, 4)
+                .map { it * 10 }
+                .filter { it >= 30 }
+
         }
+        tempList.asFlow().collect { println(it) } // 30, 40
 
-    /*
-    FLOW RAW VALUES
-     */
-
-    // flowOf() - simple and we just define the values.
-    flowOf(2, 4, 6, 8)
-        .collect { println(it) } // 2468
-
-    // emptyFlow() - flow with no values.
-    emptyFlow<Int>().collect { println(it) } // nothing returned
-
-    // asFlow() converts every iterable, iterators, or collections into flows
-    val tempList = listOf(1, 2, 3, 4)
-        .map { it * 10 }
-        .filter { it >= 30 }
-        .asFlow()
-        .collect() // 30 40
-
-    println(tempList)
-
-    // we can also convert functions to flows
-    val newFunction = suspend {
-        delay(1000)
-        "x"
+        // we can also convert functions to flows
+        val newFunction = suspend {
+            delay(1000)
+            "x"
+        }
+        newFunction.asFlow()
+            .collect { println(it) } // waits a sec, then prints x
     }
-    newFunction.asFlow()
-        .collect { println(it) } // waits a sec, then prints x
+
 }
