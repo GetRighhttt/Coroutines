@@ -11,12 +11,6 @@ import kotlinx.coroutines.runBlocking
  */
 
 /**
- *  There are a lot of ways to create flows. Here we will show the majority of those examples.
- *  Flow Builder is the most popular and most used way. When working with Android, we won't usually
- *  have to create our own flows, but this is good to understand flows better.
- */
-
-/**
  * Flow builder takes a suspend function as a function parameter which allows us to call suspend functions in it.
  */
 fun makeFlow(): Flow<Int> = flow {
