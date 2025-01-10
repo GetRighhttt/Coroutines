@@ -1,9 +1,13 @@
 package coroutines.practical_examples
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.runBlocking
@@ -43,15 +47,27 @@ fun main() {
             delay(1000L)
         }
 
-        // combine
+        // combine + other intermediary operators
         numberFlow.combine(textFlow) { number, text ->
             println("$number + $text")
-        }.collect()
+        }
+            .flowOn(Dispatchers.IO)
+            .catch { e -> e.printStackTrace() }
+            .onCompletion {
+                delay(1000L)
+                println("combine method completed")
+            }.collect()
 
-        // zip
+        // zip + other intermediary operators
         numberFlow.zip(textFlow) { number, text ->
             println("$number to $text")
-        }.collect()
+        }
+            .flowOn(Dispatchers.IO)
+            .catch { e -> e.printStackTrace() }
+            .onCompletion {
+                delay(1000L)
+                println("zip method completed")
+            }.collect()
 
         /**
          * 1 + one
@@ -63,11 +79,13 @@ fun main() {
          * 5 + three
          * 5 + four
          * 5 + five
+         * combine method completed
          * 1 to one
          * 2 to two
          * 3 to three
          * 4 to four
          * 5 to five
+         * zip method completed
          */
 
         /**
