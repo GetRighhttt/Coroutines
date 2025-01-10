@@ -9,3 +9,6 @@ combine, etc. to get your desired output.
 2. Intermediate Operators - operators that are performed in between the flow emission and terminal
 operators
 3. Lifecycle Operators - operators that perform operations on the lifecycle of the flow
+
+Here is a link that list most of all the operators used:
+[Flow_Operators](https://medium.com/@arshamjafari85/mastering-flow-operators-in-kotlin-a-comprehensive-guide-192ac58e7104)
