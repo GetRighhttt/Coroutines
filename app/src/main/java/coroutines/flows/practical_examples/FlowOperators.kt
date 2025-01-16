@@ -26,7 +26,7 @@ fun main() {
          * elements emitted whenever a change occurs.
          *
          * zip() - makes pairs of both flows. Need to specify a function to determine how the elements
-         * are paired together. Each element can only be apart of one pair thus meaning it needs to
+         * are paired together. Each element can only be a part of one pair thus meaning it needs to
          * wait for it's pair to be complete before emitting. Elements without a pair are lost. Zip
          * is used when we need to pair to elements from two different streams.
          *
