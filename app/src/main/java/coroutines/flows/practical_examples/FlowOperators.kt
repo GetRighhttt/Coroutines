@@ -41,7 +41,7 @@ fun main() {
             delay(1000L)
         }
 
-        // combine + other intermediary operators
+        // combine + other operators
         numberFlow.combine(textFlow) { number, text ->
             println("$number + $text")
         }
@@ -52,7 +52,7 @@ fun main() {
                 println("combine method completed")
             }.collect()
 
-        // zip + other intermediary operators
+        // zip + other operators
         numberFlow.zip(textFlow) { number, text ->
             println("$number to $text")
         }
