@@ -20,14 +20,14 @@ fun main() {
 
     runBlocking {
         /**
-         * combine() - forms pairs from elements. When using combine, every new elements replaces its'
+         * combine() - forms pairs from elements. When using combine, every new element replaces its
          * predecessor. Combine also will emit until both flows are closed. Combine is mostly used
          * when needing to actively observe two sources of changes. Good for when we need to have
          * elements emitted whenever a change occurs.
          *
          * zip() - makes pairs of both flows. Need to specify a function to determine how the elements
-         * are paired together. Each element can only be a part of one pair thus meaning it needs to
-         * wait for it's pair to be complete before emitting. Elements without a pair are lost. Zip
+         * are paired together. Each element can only be a part of one pair, thus meaning it needs to
+         * wait for its pair to be complete before emitting. Elements without a pair are lost. Zip
          * is used when we need to pair to elements from two different streams.
          *
          * combine emits updates as soon as streams change while zip waits for pairs to complete.
@@ -93,13 +93,12 @@ fun main() {
          * concatenates them together into a single ordered list.
          *
          * flatmapMerge - map() and flatterMerge() methods are used here to first transform the flow
-         * and then merge them to a single list. The concurrency parameter controls the number of
          * concurrent flows that should be collected. flatmapMerge() doesn't block the initial value
-         * so the list do not appear ordered.
+         * so the list does not appear ordered.
          *
-         * flatmapLatest() = good for newest event
+         * flatmapLatest() = good for the newest event
          * flatmapConcat() = good for processing new flows in an ordered list
-         * flatmapMerge() = good for just merging code together and emitting values.
+         * flatmapMerge() = good for just merging code and emitting values.
          */
     }
 }
