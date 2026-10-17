@@ -6,6 +6,8 @@ misread. The examples are intentionally small so each one can be read on its own
 
 The [learning history](docs/learning-history.md) explains how the examples and notes fit together.
 
+![Map of coroutine learning topics: getting started, managing work, and working with data](docs/images/coroutines-learning-map.png)
+
 ## Start here
 
 Read the topics in this order when learning the basics:
