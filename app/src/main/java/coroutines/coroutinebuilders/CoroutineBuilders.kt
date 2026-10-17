@@ -1,63 +1,43 @@
 package coroutines.coroutinebuilders
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
+ * Compares launch, which returns a Job, with async, which returns a Deferred result.
+ *
+ * join waits for completion; await also returns the result. runBlocking blocks the calling
+ * thread until its block and children finish.
+ *
  * @author Stefan Bayne
  */
-
-/**
- * Coroutine Builders are nothing more than functions that we use to create coroutines.
- * launch, async, and runBlocking are coroutine builders that essentially just create coroutines.
- *
- * launch and async both run concurrently, however async returns a result.
- *
- * runBlocking is the only Coroutine builder that cannot be used in Structured Concurrency. It must be used as
- * a root or parent scope.
- *
- * Jobs are the results of running an asynchronous task.
- * "A cancellable thing with a lifecycle that culminates its completion".
- * Kind of like a disposable, and it represents an actual coroutine.
- * Job can be used to execute a number of methods built in to the coroutines api including canceling coroutines.
- */
-fun main() = runBlocking { // creates a blocking coroutine that executes in main
+fun main() = runBlocking {
 
     println("Start of main program: ${Thread.currentThread().name}")
 
-    /**
-     * launch = standalone: known for fire and forget; launches then forgets essentially and doesn't block thread in which
-    * it operates. Also, returns a job object that we can use to manipulate the coroutines.
-     *
-     * We will launch this on the IO dispatcher.
-     */
+    // launch returns a Job for waiting or cancellation.
     val job: Job = launch(Dispatchers.IO) {
         println("Start of launch worker thread: ${Thread.currentThread().name}")
         delay(1000)
         println("End of launch worker thread: ${Thread.currentThread().name}")
     }
-    // join() is used to wait for coroutine to finish executing, then next statement will be executed.
     job.join()
 
-    /**
-     * async = deferred; doesn't return a job object but instead returns a deferred object which is a subclass of Job.
-     * The return type is of a generic type, so we can pass whatever we want into it.
-     *
-     * Async function is usually used when we want to return some data. It is pretty much the same as launch
-     * except it returns a Deferred<T> object of generic type. Async {} is usually used when we
-     * want to launch multiple coroutines in parallel, and Await() the result to perform another operation.
-     *
-     * We will launch this on the default dispatcher.
-     */
+    // async returns a Deferred<Int>; await retrieves its result.
     val jobDeferred: Deferred<Int> = async(Dispatchers.Default) {
         println("Start of async worker thread: ${Thread.currentThread().name}")
         delay(1000)
         println("End of async worker thread: ${Thread.currentThread().name}")
-        22// returns a deferred object and here we pass that object as an int
+        22
     }
 
-    val numberFromAsync = jobDeferred.await() // wait for coroutine to finish and retrieve the value from the coroutine.
+    val numberFromAsync = jobDeferred.await()
     println("The value from the async deferred job is: $numberFromAsync !")
-
 
     println("End of main program: ${Thread.currentThread().name}")
 

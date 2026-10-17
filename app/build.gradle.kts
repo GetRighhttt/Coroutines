@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kotlin_coroutines"
+    namespace = "com.stefanbayne.coroutines"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.kotlin_coroutines"
+        applicationId = "com.stefanbayne.coroutines"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -12,42 +12,18 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-
 /**
+ * Shows a cold flow built with flow and collected with collect or launchIn.
+ *
+ * The producer emits values; the collector receives them. Each collection starts the producer
+ * again. By default, emission and collection run sequentially in the collecting coroutine.
+ *
  * @author Stefan Bayne
- */
-
-/**
- *
- * Flows allow us to achieve Reactive Programming whereas Coroutines are not considered reactive
- * because we do not have a subscription/publish (sub/pub) functional chain in place.
- * "Reactive programming is largely based on observing some data, and performing some
- * operations based on the data returned."
- *
- * Flows are streams of data that can be computed asynchronously that allow us to have multiple
- * return values unlike regular suspend functions, and help us to achieve reactive programming.
- *
- * "A cold, asynchronous stream and is an implementation of the Observable design pattern."
- * Cold = starts when user subscribes to it, starts anew for each new subscriber.
- * Hot = continuously emits results.
- *
- * Observable design pattern has two methods - subscribe() and publish() btw.
- * With Flows emit() = subscribe() and collect() = publish().
- * Producers(data sources/repositories) emit data to the flow, that can then be collected(UI layer) by the UI.
- *
- * Flows are suspending but not concurrent, are cold, and use backpressure: resisting flow of data.
- *
- * Flow = emit/collect (sub/pub) and are cold.
  */
 
 suspend fun main() {
 
-    /**
-     * Flows first launch with a value source that fires these emissions.
-     *
-     * It then needs a collector/terminal operator to collect the values. The values will not show
-     * if not collected properly.
-     */
+    // Collection starts the cold producer.
     runBlocking {
         launch {
             flow {
@@ -67,10 +43,7 @@ suspend fun main() {
             delay(2000)
         }
     }
-    /**
-     * We can also have intermediate or optional methods that perform before a flow is emitted, and
-     * can also use the launchIn() method to reduce having to explicitly launch the flow.
-     */
+    // launchIn starts collection in the supplied scope.
     runBlocking {
         flow {
             delay(1000)
@@ -82,26 +55,23 @@ suspend fun main() {
             delay(4000)
             emit(4)
             delay(1000)
-        }.onEach { // intermediate method
+        }.onEach {
             println("Received: $it")
-        }.catch { throw CancellationException() } // cancels after first emission and continues
+        }.catch { throw CancellationException() } // Converts an upstream failure into cancellation.
             .launchIn(scope = CoroutineScope(Dispatchers.IO))
         delay(2000)
     }
 
-    /**
-     * We can also construct flows using flow builders. For example:
-     */
     val numberFlow: Flow<Int> = flow {
         (0..10).forEach {
             println("Sending $it")
-            emit(it) // subscribes
-            if (it == 11) throw RuntimeException() // throws exception if reaches 10.
+            emit(it)
+            if (it == 11) throw RuntimeException() // Unreachable: the range ends at 10.
         }
     }
 
     try {
-        numberFlow.collect {// publishes
+        numberFlow.collect {
             println("Received: $it")
         }
     } catch (e: InterruptedException) {

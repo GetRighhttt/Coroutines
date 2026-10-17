@@ -1,4 +1,4 @@
-package coroutines.flows.practical_examples
+package coroutines.flows.practicalexamples
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -7,7 +7,10 @@ import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-fun timeAndEmit(emissionsPerSecond: Float) : Flow<Duration> {
+/** Emits the elapsed time between ticks until the collector is cancelled. */
+fun timeAndEmit(emissionsPerSecond: Float): Flow<Duration> {
+    require(emissionsPerSecond > 0) { "emissionsPerSecond must be greater than zero" }
+
     return flow {
         var lastEmitTime = System.currentTimeMillis()
         emit(Duration.ZERO)

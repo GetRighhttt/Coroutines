@@ -1,49 +1,33 @@
 package coroutines.continuation
 
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-/**
- * @author Stefan Bayne
- */
-
-@OptIn(DelicateCoroutinesApi::class)
+/** Shows how a continuation resumes suspended work on a chosen context. */
 fun main() {
-
-    // code to be called when resuming a suspension
-    fun showContinuation() = GlobalScope.launch {
+    runBlocking {
+        fun showContinuation() = launch(Dispatchers.Default) {
         Continuation<Int>(Dispatchers.Default) { continuation ->
             println("Inside a continuation right now... ${continuation.isSuccess}")
         }.resume(1)
-    }
-    runBlocking {
+        }
+
         launch {
             println("starting coroutine...")
             println("delaying...")
             delay(1000)
-            showContinuation()
+            showContinuation().join()
         }
         launch {
             delay(2000L)
             println("new coroutine")
             println("delaying...")
             delay(1000)
-            showContinuation()
+            showContinuation().join()
         }
     }
-
-    /**
-     * starting coroutine...
-     * delaying...
-     * Inside a continuation right now... true
-     * new coroutine
-     * delaying...
-     * Inside a continuation right now... true
-     */
 }

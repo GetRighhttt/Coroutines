@@ -15,16 +15,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 
-
 /**
- * @author Stefan Bayne
- */
-
-/**
- * Flow builder takes a suspend function as a function parameter which allows us to call suspend
- * functions in it.
+ * Builds cold flows from values, collections, and suspending functions.
  *
- * public fun <T> flow (@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<T>
+ * Intermediate operators transform emissions; terminal operators such as collect start the work.
+ *
+ * @author Stefan Bayne
  */
 
 fun makeFlow(): Flow<Int> = flow {
@@ -39,10 +35,6 @@ fun makeFlow(): Flow<Int> = flow {
         it.printStackTrace()
     } // 0 6 12 18 24
 
-/**
- * Let's now create lists we can use to demonstrate passing in a stream or list of data, and
- * returning that data in a flow.
- */
 fun fetchUserMessages(): List<String> {
     return listOf("Here we are!", "It's time to party!", "Don't wait up!", "It's going down today!")
 }
@@ -51,10 +43,7 @@ fun fetchUserNumbers(): MutableList<String> {
     return mutableListOf("1234", "5678")
 }
 
-/**
- * Now we are going to use the lists created above, and demonstrate how we can use intermediary or
- * optional methods on those lists as they are being emitted to manipulate streams of data.
- */
+// Repeat the same message list as a single formatted emission.
 fun buildFlow(): Flow<String> = flow {
     var count = 5
     while (count != 0) {
@@ -73,7 +62,7 @@ fun buildNumberFlow(): Flow<String> = flow {
         emit(userNumbers
             .joinToString(" ")
             .toList()
-            .map { it.code } // converts char to Number UTF-16
+            .map { it.code } // UTF-16 code unit
             .filter { it % 2 == 0 }
             .forEach {
                 println(it)
@@ -88,28 +77,24 @@ fun buildNumberFlow(): Flow<String> = flow {
 fun main() {
 
     runBlocking {
-        // display flow data from lists we created
         makeFlow().collect { println(it) }
         buildFlow().collect { println(it) }
         buildNumberFlow().collect()
 
-        // flowOf() - simple and we just define the values.
         flowOf(2, 4, 6, 8)
-            .collect { println(it) } // 2468
+            .collect { println(it) } // 2, 4, 6, 8
 
-        // emptyFlow() - flow with no values.
-        emptyFlow<Int>().collect { println(it) } // nothing returned
+        emptyFlow<Int>().collect { println(it) } // No emissions
 
-        // asFlow() converts every iterable, iterators, or collections into flows
+        // A suspending function can also be converted to a flow.
         val tempList = suspend {
             listOf(1, 2, 3, 4)
                 .map { it * 10 }
                 .filter { it >= 30 }
 
         }
-        tempList.asFlow().onEach { println(it) }.collect() // 30, 40
+        tempList.asFlow().onEach { println(it) }.collect() // [30, 40]
 
-        // we can also convert functions to flows
         val newFunction = suspend {
             delay(1000)
             "x"
@@ -121,31 +106,8 @@ fun main() {
             .combine(tempList.asFlow()) { number, list ->
                 "$number to $list"
             }
-            .onEach { println(it) } // waits a sec, then prints x
+            .onEach { println(it) } // x to [30, 40]
             .collect()
     }
 
-    /**
-     * 0
-     * 6
-     * 12
-     * 18
-     * 24
-     * here we are! it's time to party! don't wait up! it's going down today!
-     * here we are! it's time to party! don't wait up! it's going down today!
-     * here we are! it's time to party! don't wait up! it's going down today!
-     * here we are! it's time to party! don't wait up! it's going down today!
-     * here we are! it's time to party! don't wait up! it's going down today!
-     * 50
-     * 52
-     * 32
-     * 54
-     * 56
-     * 2
-     * 4
-     * 6
-     * 8
-     * [30, 40]
-     * x to [30, 40]
-     */
 }
