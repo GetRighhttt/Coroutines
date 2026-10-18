@@ -1,8 +1,7 @@
 # Kotlin coroutines
 
-This repository is a growing set of Kotlin coroutine notes and runnable examples. It records the
-ideas I am learning, the questions I am testing, and the places where coroutine behavior is easy to
-misread. The examples are intentionally small so each one can be read on its own.
+These are my Kotlin coroutine notes and runnable examples. I use them to test ideas and understand
+behavior that is easy to misread. Each example is small enough to read on its own.
 
 The [learning history](docs/learning-history.md) explains how the examples and notes fit together.
 
@@ -38,7 +37,7 @@ the topic names, such as `coroutines.basics` and `coroutines.flows.hot.state`.
 The longer notes that are not Kotlin source live in [`docs/topics`](docs/topics). They are part of
 the same learning record and are linked from the relevant sections above.
 
-The [reference notes](docs/README.md) provide the same index in a documentation-first form. The
+The [reference notes](docs/README.md) collect the topic links in one place. The
 [coding conventions](docs/coding-conventions.md) explain the choices used in the examples.
 
 ## Run the project
@@ -46,9 +45,9 @@ The [reference notes](docs/README.md) provide the same index in a documentation-
 Open the project in Android Studio and run the standard debug build. The project targets Android API
 35, uses Java 11 bytecode, and includes `kotlinx-coroutines-core` for the standalone examples.
 
-The examples are documentation, not an Android app feature. `runBlocking` appears in several entry
-points because it gives a command-line-style example a clear owner. Android production code should
-use a lifecycle-owned scope such as a ViewModel or a lifecycle owner instead.
+Several standalone examples use `runBlocking` to wait for their coroutines before the entry point
+returns. Android app work should use a lifecycle-owned scope, such as `viewModelScope` or
+`lifecycleScope`.
 
 ## Notes on the examples
 
